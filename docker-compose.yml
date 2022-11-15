@@ -5,60 +5,44 @@ networks:
 
 services:
   postgres:
-    image: "radondb/radondb-postgresql:12.12-v1.1.0"
+    image: "postgres:14.6"
     ports:
       - "5432:5432"
-      - "3306:3306"
       - "10051:10051"
       - "10050:10050"
       - "80:80"
       - "8080:8080"
     environment:
-      POSTGRES_DB: "test"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      PG_CONFIG_max_connections: 101
+      POSTGRES_DB: "zabbix"
+      POSTGRES_USER: "zabbix"
+      POSTGRES_PASSWORD: "zabbix"
+    volumes:
+      - ./conf/create.sql:/docker-entrypoint-initdb.d/create.sql
     container_name: postgres
     networks:
       net:
         aliases:
           - postgres
 
-  mysql:
-    image: "mysql:8.0.30"
-#    ports:
-#      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: "zabbix"
-      MYSQL_USER: "zabbix"
-      MYSQL_PASSWORD: "zabbix"
-      MYSQL_ROOT_PASSWORD: "root"
-    volumes:
-      - ./conf/create.sql:/docker-entrypoint-initdb.d/create.sql
-    container_name: mysql
-    network_mode: "service:postgres"
-#    networks:
-#      net:
-#        aliases:
-#          - mysql
-
-  zabbix-server-mysql:
-    image: "zabbix/zabbix-server-mysql:6.2.4-ubuntu"
+  zabbix-server-pgsql:
+    image: "zabbix/zabbix-server-pgsql:6.2.4-ubuntu"
 #    ports:
 #      - "10051:10051"
+    volumes:
+      - ./conf/zabbix_server.conf:/etc/zabbix/zabbix_server.conf
     environment:
       DB_SERVER_HOST: "127.0.0.1"
-      DB_SERVER_PORT: "3306"
-      MYSQL_USER: "zabbix"
-      MYSQL_PASSWORD: "zabbix"
-    container_name: zabbix-server-mysql
+      DB_SERVER_PORT: "5432"
+      POSTGRES_USER: "zabbix"
+      POSTGRES_PASSWORD: "zabbix"
+    container_name: zabbix-server-pgsql
     network_mode: "service:postgres"
     depends_on:
-      - mysql
+      - postgres
   #    networks:
   #      net:
   #        aliases:
-  #          - zabbix-server-mysql
+  #          - zabbix-server-pgsql
 
   zabbix-agent2:
     image: "zabbix/zabbix-agent2:6.2.4-ubuntu"
@@ -67,18 +51,19 @@ services:
     volumes:
       - ./conf/postgresql.conf:/etc/zabbix/zabbix_agent2.d/plugins.d/postgresql.conf
     environment:
+      ZBX_HOSTNAME: "Zabbix server"
       ZBX_SERVER_HOST: "127.0.0.1"
     container_name: zabbix-agent2
     network_mode: "service:postgres"
     depends_on:
-      - zabbix-server-mysql
+      - zabbix-server-pgsql
 #    networks:
 #      net:
 #        aliases:
 #          - zabbix-agent2
 
-  zabbix-web-apache-mysql:
-    image: "zabbix/zabbix-web-apache-mysql:6.2.4-ubuntu"
+  zabbix-web-apache-pgsql:
+    image: "zabbix/zabbix-web-apache-pgsql:6.2.4-ubuntu"
 #    ports:
 #      - "80:80"
 #      - "8080:8080"
@@ -86,14 +71,14 @@ services:
       ZBX_SERVER_HOST: "127.0.0.1"
       ZBX_SERVER_PORT: "10051"
       DB_SERVER_HOST: "127.0.0.1"
-      DB_SERVER_PORT: "3306"
-      MYSQL_USER: "zabbix"
-      MYSQL_PASSWORD: "zabbix"
-      MYSQL_DATABASE: "zabbix"
-    container_name: zabbix-web-apache-mysql
+      DB_SERVER_PORT: "5432"
+      POSTGRES_USER: "zabbix"
+      POSTGRES_PASSWORD: "zabbix"
+      POSTGRES_DB: "zabbix"
+    container_name: zabbix-web-apache-pgsql
     network_mode: "service:postgres"
     depends_on:
-      - zabbix-server-mysql
+      - zabbix-server-pgsql
 #    networks:
 #      net:
 #        aliases:

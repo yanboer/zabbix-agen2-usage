@@ -1,10 +1,10 @@
 # create.sql
-`create.sql` file from zabbix-server-mysql container, /usr/share/doc/zabbix-server-mysql/create.sql.gz file
+`create.sql` file from zabbix-server-pgsql container, /usr/share/doc/zabbix-server-pgsql/create.sql.gz file
 
 # zabbix dashboard
 ip:8080 
 
-user admin/zabbix login
+user: Admin/zabbix
 
 # usage
 
