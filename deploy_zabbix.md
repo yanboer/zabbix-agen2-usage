@@ -43,6 +43,8 @@ apt update
 apt install zabbix-server-pgsql zabbix-frontend-php php7.4-pgsql zabbix-apache-conf zabbix-sql-scripts zabbix-agent2 zabbix-agent2-plugin-*
 ```
 
+> more zabbix repo please visit: https://www.zabbix.com/download
+
 ##### (2) postgresql database import zabbix initial schema and data
 ```bash
 sudo -u postgres createuser --pwprompt zabbix

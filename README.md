@@ -23,8 +23,11 @@ user: Admin(admin)/zabbix
 
 - b. set Macros var
 
-MySQL set：{$MYSQL.DSN} {$MYSQL.PASSWORD} {$MYSQL.USER}
-PostgreSQL set: {$PG.DATABASE} {$PG.PASSWORD} {$PG.URI} {$PG.USER}
+> MySQL set：{$MYSQL.DSN} {$MYSQL.PASSWORD} {$MYSQL.USER}
+> 
+> PostgreSQL set: {$PG.DATABASE} {$PG.PASSWORD} {$PG.URI} {$PG.USER}
+>
+> more please visit: https://git.zabbix.com/projects/ZBX/repos/zabbix/browse/templates/db/postgresql?at=release/6.2
 
 ![STEP1](_images/step2.png)
 
