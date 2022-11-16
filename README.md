@@ -2,14 +2,34 @@
 `create.sql` file from zabbix-server-pgsql container, /usr/share/doc/zabbix-server-pgsql/create.sql.gz file
 
 # zabbix dashboard
-ip:8080 
+ip:8080 or ip:80/zabbix
 
-user: Admin/zabbix
+user: Admin(admin)/zabbix
 
 # usage
 
 1. login web page
-2. add host
+2. add host(Configuration/Hosts)
+![STEP1](_images/step0.png)
+
+- a. set Host
+![STEP1](_images/step1.png)
+
+> MySQL template: MySQL by Zabbix agent 2
+> PostgreSQL template: PostgreSQL by Zabbix agent 2
+
+![STEP1](_images/template.png)
+
+- b. set Macros var
+
+MySQL set：{$MYSQL.DSN} {$MYSQL.PASSWORD} {$MYSQL.USER}
+PostgreSQL set: {$PG.DATABASE} {$PG.PASSWORD} {$PG.URI} {$PG.USER}
+
+![STEP1](_images/step2.png)
+
+3. test data(Monitoring/Latest data)
+![STEP1](_images/step3.png)
+
 
 
 xxx. add test data
