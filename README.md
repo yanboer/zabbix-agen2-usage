@@ -16,6 +16,7 @@ user: Admin(admin)/zabbix
 ![STEP1](_images/step1.png)
 
 > MySQL template: MySQL by Zabbix agent 2
+> 
 > PostgreSQL template: PostgreSQL by Zabbix agent 2
 
 ![STEP1](_images/template.png)
